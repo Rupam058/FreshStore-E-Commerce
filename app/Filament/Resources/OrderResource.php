@@ -67,28 +67,34 @@ class OrderResource extends Resource {
 
                         ToggleButtons::make('status')
                             ->inline()
-                            ->default('new')
+                            ->default('processing')
                             ->required()
                             ->options([
-                                'new' => 'New',
                                 'processing' => 'Processing',
+                                'confirmed' => 'Confirmed',
                                 'shipping' => 'Shipping',
+                                'shipped' => 'Shipped',
                                 'delivered' => 'Delivered',
                                 'cancelled' => 'Cancelled',
+                                'refunded' => 'Refunded',
                             ])
                             ->colors([
-                                'new' => 'info',
                                 'processing' => 'warning',
+                                'confirmed' => 'info',
                                 'shipping' => 'success',
+                                'shipped' => 'success',
                                 'delivered' => 'success',
                                 'cancelled' => 'danger',
+                                'refunded' => 'gray',
                             ])
                             ->icons([
-                                'new' => 'heroicon-m-sparkles',
                                 'processing' => 'heroicon-m-arrow-path',
-                                'shipping' => 'heroicon-m-truck',
+                                'confirmed' => 'heroicon-m-sparkles',
+                                'shipping' => 'heroicon-o-truck',
+                                'shipped' => 'heroicon-m-truck',
                                 'delivered' => 'heroicon-m-check-badge',
                                 'cancelled' => 'heroicon-m-x-circle',
+                                'refunded' => 'heroicon-m-arrow-uturn-left',
                             ]),
 
                         Select::make('currency')
@@ -250,11 +256,13 @@ class OrderResource extends Resource {
 
                 SelectColumn::make('status')
                     ->options([
-                        'new' => 'New',
                         'processing' => 'Processing',
+                        'confirmed' => 'Confirmed',
                         'shipping' => 'Shipping',
+                        'shipped' => 'Shipped',
                         'delivered' => 'Delivered',
                         'cancelled' => 'Cancelled',
+                        'refunded' => 'Refunded',
                     ])
                     ->searchable()
                     ->sortable(),
