@@ -9,7 +9,7 @@ class OrderItem extends Model {
         'order_by',
         'product_id',
         'quantity',
-        'unit_amout',
+        'unit_amount',
         'total_amount',
     ];
 

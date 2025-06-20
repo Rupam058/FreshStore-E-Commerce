@@ -43,23 +43,29 @@ class ProductResource extends Resource {
                             ->required()
                             ->maxLength(255)
                             ->live(onBlur: true)
-                            ->afterStateUpdated(function (string $operation, $state, Set $set) {
-                                if ($operation !== 'create') {
-                                    return;
+                            // ->afterStateUpdated(function (string $operation, $state, Set $set) {
+                            //     if ($operation !== 'create') {
+                            //         return;
+                            //     }
+                            //     $set('slug', Str::slug($state));
+                            // }),
+                            ->afterStateUpdated(function ($state, Set $set) {
+                                if (filled($state)) {
+                                    $set('slug', Str::slug($state));
                                 }
-                                $set('slug', Str::slug($state));
                             }),
 
                         TextInput::make('slug')
                             ->required()
                             ->maxLength(255)
-                            ->disabled()
-                            ->dehydrated()
+                            // ->disabled()
+                            // ->dehydrated()
                             ->unique(
                                 Product::class,
                                 'slug',
                                 ignoreRecord: true
-                            ),
+                            )
+                            ->readOnly(),
 
 
                         MarkdownEditor::make('description')
