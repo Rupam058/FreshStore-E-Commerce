@@ -21,6 +21,10 @@ class UserResource extends Resource {
 
     protected static ?string $navigationIcon = 'heroicon-o-user-group';
 
+    protected static ?string $recordTitleAttribute = 'name';
+
+    protected static ?int $navigationSort = 1;
+
     public static function form(Form $form): Form {
         return $form
             ->schema([
@@ -81,6 +85,13 @@ class UserResource extends Resource {
     public static function getRelations(): array {
         return [
             OrdersRelationManager::class,
+        ];
+    }
+
+    public static function getGloballySearchableAttributes(): array {
+        return [
+            'name',
+            'email',
         ];
     }
 
