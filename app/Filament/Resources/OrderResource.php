@@ -82,7 +82,7 @@ class OrderResource extends Resource {
                             ->colors([
                                 'processing' => 'warning',
                                 'confirmed' => 'info',
-                                'shipping' => 'success',
+                                'shipping' => 'primary',
                                 'shipped' => 'success',
                                 'delivered' => 'success',
                                 'cancelled' => 'danger',
@@ -212,8 +212,8 @@ class OrderResource extends Resource {
                         'cod' => 'Cash on Delivery'
                     ][$state] ?? $state)
                     ->color(fn($state) => match ($state) {
-                        'stripe' => 'primary',
-                        'cod' => 'secondary',
+                        'stripe' => 'success',
+                        'cod' => 'info',
                         default => 'gray',
                     })
                     ->searchable()
@@ -246,10 +246,10 @@ class OrderResource extends Resource {
                     ][$state] ?? $state)
                     ->color(fn($state) => match ($state) {
                         'fedex' => 'info',
-                        'ups' => 'primary',
-                        'dhl' => 'warning',
-                        'usps' => 'secondary',
-                        'local' => 'success',
+                        'ups' => 'info',
+                        'dhl' => 'info',
+                        'usps' => 'info',
+                        'local' => 'info',
                         default => 'gray',
                     })
                     ->searchable()
