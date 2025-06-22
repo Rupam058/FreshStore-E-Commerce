@@ -12,6 +12,7 @@
                   <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">
                      Don't have an account yet?
                      <a
+                        wire:navigate
                         class="text-blue-600 decoration-2 hover:underline font-medium dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
                         href="/register"
                      >
@@ -73,6 +74,7 @@
                               class="block text-sm mb-2 dark:text-white"
                            >Password</label>
                            <a
+                              wire:navigate
                               class="text-sm text-blue-600 decoration-2 hover:underline font-medium dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
                               href="/forgot"
                            >Forgot password?</a>

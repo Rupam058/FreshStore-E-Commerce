@@ -8,10 +8,10 @@
       <div class="relative md:flex md:items-center md:justify-between">
          <div class="flex items-center justify-between">
             <a
-               class="flex-none text-xl font-semibold dark:text-white dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
+               class="flex-none text-xl font-bold dark:text-white dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
                href="/"
                aria-label="Brand"
-            >DCodeMania</a>
+            >FreshStore</a>
             <div class="md:hidden">
                <button
                   type="button"
@@ -82,27 +82,31 @@
                >
 
                   <a
-                     class="font-medium text-blue-600 py-3 md:py-6 dark:text-blue-500 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
+                     wire:navigate
+                     class="font-medium {{ request()->is('/') ? 'text-blue-600' : 'text-gray-500' }} py-3 md:py-6 dark:text-blue-500 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
                      href="/"
                      aria-current="page"
                   >Home</a>
 
                   <a
-                     class="font-medium text-gray-500 hover:text-gray-400 py-3 md:py-6 dark:text-gray-400 dark:hover:text-gray-500 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
+                     wire:navigate
+                     class="font-medium {{ request()->is('categories') ? 'text-blue-600' : 'text-gray-500' }} hover:text-gray-400 py-3 md:py-6 dark:text-gray-400 dark:hover:text-gray-500 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
                      href="/categories"
                   >
                      Categories
                   </a>
 
                   <a
-                     class="font-medium text-gray-500 hover:text-gray-400 py-3 md:py-6 dark:text-gray-400 dark:hover:text-gray-500 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
+                     wire:navigate
+                     class="font-medium {{ request()->is('products') ? 'text-blue-600' : 'text-gray-500' }} hover:text-gray-400 py-3 md:py-6 dark:text-gray-400 dark:hover:text-gray-500 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
                      href="/products"
                   >
                      Products
                   </a>
 
                   <a
-                     class="font-medium flex items-center text-gray-500 hover:text-gray-400 py-3 md:py-6 dark:text-gray-400 dark:hover:text-gray-500 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
+                     wire:navigate
+                     class="font-medium flex items-center {{ request()->is('cart') ? 'text-blue-600' : 'text-gray-500' }} hover:text-gray-400 py-3 md:py-6 dark:text-gray-400 dark:hover:text-gray-500 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
                      href="/cart"
                   >
                      <svg
@@ -126,6 +130,7 @@
 
                   <div class="pt-3 md:pt-0">
                      <a
+                        wire:navigate
                         class="py-2.5 px-4 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
                         href="/login"
                      >

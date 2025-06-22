@@ -8,7 +8,7 @@
       content="width=device-width, initial-scale=1.0"
    >
 
-   <title>{{ $title ?? 'Fresh' }}</title>
+   <title>{{ $title ?? 'FreshStore' }}</title>
    @vite(['resources/css/app.css', 'resources/js/app.js'])
    @livewireStyles()
 </head>
