@@ -144,6 +144,8 @@
                </div>
             </div>
 
+            {{-- Drop Down Start --}}
+
             <div class="w-full px-3 lg:w-3/4">
                <div class="px-3 mb-4">
                   <div
@@ -151,17 +153,17 @@
                   >
                      <div class="flex items-center justify-between">
                         <select
-                           name=""
-                           id=""
+                           wire:model.live='sort'
                            class="block w-40 text-base bg-gray-100 cursor-pointer dark:text-gray-400 dark:bg-gray-900"
                         >
-                           <option value="">Sort by latest</option>
-                           <option value="">Sort by Price</option>
+                           <option value="latest">Sort by latest</option>
+                           <option value="price">Sort by Price</option>
                         </select>
                      </div>
                   </div>
                </div>
 
+               {{-- Drop Down End --}}
                {{-- Products Start --}}
                <div class="flex flex-wrap items-center ">
 
