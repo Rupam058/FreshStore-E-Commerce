@@ -156,6 +156,7 @@
                            wire:model.live='sort'
                            class="block w-40 text-base bg-gray-100 cursor-pointer dark:text-gray-400 dark:bg-gray-900"
                         >
+                           <option value="oldest">Sort by Oldest</option>
                            <option value="latest">Sort by latest</option>
                            <option value="price">Sort by Price</option>
                         </select>

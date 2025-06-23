@@ -31,7 +31,7 @@ class ProductsPage extends Component {
     public $price_range = 200000;
 
     #[Url]
-    public $sort = 'latest';
+    public $sort = 'oldest';
 
     public function render() {
         $productQuery = Product::query()->where('is_active', 1);
@@ -53,6 +53,9 @@ class ProductsPage extends Component {
         }
         if ($this->sort == 'latest') {
             $productQuery->latest();
+        }
+        if ($this->sort == 'oldest') {
+            $productQuery->orderBy('created_at', 'asc'); // DEFAULT
         }
         if ($this->sort == 'price') {
             $productQuery->orderBy('price');
