@@ -8,6 +8,9 @@ use App\Models\Product;
 use App\Observers\BrandObserver;
 use App\Observers\CategoryObserver;
 use App\Observers\ProductObserver;
+use Filament\Support\Assets\Js;
+use Filament\Support\Facades\FilamentAsset;
+use Illuminate\Support\Facades\Vite;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider {
@@ -25,5 +28,10 @@ class AppServiceProvider extends ServiceProvider {
         Category::observe(CategoryObserver::class);
         Brand::observe(BrandObserver::class);
         Product::observe(ProductObserver::class);
+
+        FilamentAsset::register([
+            // Or via CDN
+            Js::make('sweetalert2', 'https://cdn.jsdelivr.net/npm/sweetalert2@11'),
+        ]);
     }
 }
