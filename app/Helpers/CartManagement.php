@@ -19,7 +19,7 @@ class CartManagement {
       }
     }
 
-    if ($existing_item != null) {
+    if ($existing_item !== null) {
 
       $cart_items[$existing_item]['quantity']++;
       $cart_items[$existing_item]['total_amount'] =
