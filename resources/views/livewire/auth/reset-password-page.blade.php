@@ -31,7 +31,7 @@
                                  aria-describedby="email-error"
                               >
                               <div
-                                 class="hidden absolute inset-y-0 end-0 flex items-center pointer-events-none pe-3"
+                                 class="absolute inset-y-0 end-0 flex items-center pointer-events-none pe-3"
                               >
                                  <svg
                                     class="h-5 w-5 text-red-500"
@@ -70,7 +70,7 @@
                               >
 
                               <div
-                                 class="hidden  inset-y-0 end-0 flex items-center pointer-events-none pe-3"
+                                 class="inset-y-0 end-0 flex items-center pointer-events-none pe-3"
                               >
                                  <svg
                                     class="h-5 w-5 text-red-500"
