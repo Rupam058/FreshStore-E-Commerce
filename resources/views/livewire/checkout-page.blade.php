@@ -140,6 +140,7 @@
                            @enderror"
                            id="state"
                            type="text"
+                           wire:model='state'
                         >
                         </input>
                         @error('state')
