@@ -63,7 +63,7 @@ class OrderResource extends Resource {
                             ->options([
                                 'pending' => 'Pending',
                                 'paid' => 'Paid',
-                                'Failed' => 'Failed'
+                                'failed' => 'Failed'
                             ])
                             ->default('pending')
                             ->required(),
@@ -202,6 +202,11 @@ class OrderResource extends Resource {
                     ->searchable()
                     ->sortable(),
 
+                TextColumn::make('id')
+                    ->label('Order ID')
+                    ->searchable()
+                    ->sortable(),
+
                 TextColumn::make('grand_total')
                     ->numeric()
                     ->sortable()
@@ -226,7 +231,7 @@ class OrderResource extends Resource {
                     ->formatStateUsing(fn($state) => [
                         'pending' => 'Pending',
                         'paid' => 'Paid',
-                        'Failed' => 'Failed'
+                        'failed' => 'Failed'
                     ][$state] ?? $state)
                     ->color(fn($state) => match (strtolower($state)) {
                         'pending' => 'warning',
@@ -301,6 +306,7 @@ class OrderResource extends Resource {
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
+            ->defaultSort('created_at', 'desc')
             ->filters([
                 //
             ])

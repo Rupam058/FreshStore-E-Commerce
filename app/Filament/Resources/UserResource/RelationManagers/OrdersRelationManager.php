@@ -58,7 +58,7 @@ class OrdersRelationManager extends RelationManager {
                     ->formatStateUsing(fn($state) => [
                         'pending' => 'Pending',
                         'paid' => 'Paid',
-                        'Failed' => 'Failed'
+                        'failed' => 'Failed'
                     ][$state] ?? $state)
                     ->color(fn($state) => match (strtolower($state)) {
                         'pending' => 'warning',
@@ -82,7 +82,7 @@ class OrdersRelationManager extends RelationManager {
                     ->color(fn(string $state): string => match ($state) {
                         'processing' => 'warning',
                         'confirmed' => 'info',
-                        'shipping' => 'primary',
+                        'shipping' => 'info',
                         'shipped' => 'success',
                         'delivered' => 'success',
                         'cancelled' => 'danger',

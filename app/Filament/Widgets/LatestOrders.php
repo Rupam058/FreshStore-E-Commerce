@@ -51,7 +51,7 @@ class LatestOrders extends BaseWidget {
                     ->formatStateUsing(fn($state) => [
                         'pending' => 'Pending',
                         'paid' => 'Paid',
-                        'Failed' => 'Failed'
+                        'failed' => 'Failed'
                     ][$state] ?? $state)
                     ->color(fn($state) => match (strtolower($state)) {
                         'pending' => 'warning',
