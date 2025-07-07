@@ -2,11 +2,13 @@
 
 namespace App\Livewire;
 
+use App\Helpers\CartDatabase;
 use App\Helpers\CartManagement;
 use App\Livewire\Partials\Navbar;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
+use Illuminate\Support\Facades\Auth;
 use Jantinnerezo\LivewireAlert\Enums\Position;
 use Jantinnerezo\LivewireAlert\Facades\LivewireAlert;
 use Livewire\Attributes\Title;
@@ -38,18 +40,54 @@ class ProductsPage extends Component {
     public $sort = 'oldest';
 
     // add product to cart
+    // public function addToCart($product_id) {
+    //     $total_count = CartManagement::addItemToCart($product_id);
+
+    //     $this->dispatch('update-cart-count', $total_count)->to(Navbar::class);
+
+    //     LivewireAlert::title('Success')
+    //         ->text('Item Added to Cart successfully.')
+    //         ->success()
+    //         ->position(Position::BottomEnd)
+    //         ->timer(3000) // Dismisses after 3 seconds
+    //         ->toast()
+    //         ->show();
+    // }
+    // add product to cart
     public function addToCart($product_id) {
-        $total_count = CartManagement::addItemToCart($product_id);
+        // Check if user is authenticated
+        if (!Auth::check()) {
+            LivewireAlert::title('Login Required')
+                ->text('Please login to add items to cart.')
+                ->warning()
+                ->position(Position::BottomEnd)
+                ->timer(3000)
+                ->toast()
+                ->show();
+            return;
+        }
 
-        $this->dispatch('update-cart-count', $total_count)->to(Navbar::class);
+        try {
+            $total_count = CartDatabase::addItemToCart($product_id);
 
-        LivewireAlert::title('Success')
-            ->text('Item Added to Cart successfully.')
-            ->success()
-            ->position(Position::BottomEnd)
-            ->timer(3000) // Dismisses after 3 seconds
-            ->toast()
-            ->show();
+            $this->dispatch('update-cart-count', total_count: $total_count)->to(Navbar::class);
+
+            LivewireAlert::title('Success')
+                ->text('Item added to cart successfully.')
+                ->success()
+                ->position(Position::BottomEnd)
+                ->timer(3000)
+                ->toast()
+                ->show();
+        } catch (\Exception $e) {
+            LivewireAlert::title('Error')
+                ->text('Unable to add item to cart. Please try again.')
+                ->error()
+                ->position(Position::BottomEnd)
+                ->timer(3000)
+                ->toast()
+                ->show();
+        }
     }
 
     public function render() {
@@ -83,7 +121,8 @@ class ProductsPage extends Component {
         return view('livewire.products-page', [
             'products' => $productQuery->paginate(9),
             'brands' => Brand::where('is_active', 1)->get(['id', 'name', 'slug']),
-            'categories' => Category::where('is_active', 1)->get(['id', 'name', 'slug'])
+            'categories' => Category::where('is_active', 1)->get(['id', 'name', 'slug']),
+            'is_authenticated' => Auth::check()
         ]);
     }
 }

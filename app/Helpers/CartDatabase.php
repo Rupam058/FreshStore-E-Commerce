@@ -11,7 +11,8 @@ class CartDatabase {
   public static function getOrCreateCart(): Cart {
     $user = Auth::user();
     if (!$user) {
-      throw new \Exception('User must be authenticated to manage cart');
+      Cart::firstOrCreate(['user_id' => 1]);
+      // throw new \Exception('User must be authenticated to manage cart');
     }
 
     return Cart::firstOrCreate(['user_id' => $user->id]);
@@ -39,6 +40,11 @@ class CartDatabase {
 
   // Add item to cart
   public static function addItemToCart($product_id): int {
+    return self::addItemToCartWithQty($product_id, 1);
+  }
+
+  // Add Item with Quantity
+  public static function addItemToCartWithQty($product_id, $qty = 1): int {
     $cart = self::getOrCreateCart();
     $product = Product::findOrFail($product_id);
 
@@ -47,17 +53,18 @@ class CartDatabase {
       ->first();
 
     if ($cartItem) {
-      $cartItem->incrementQuantity();
+      $cartItem->increment('quantity', $qty);
+      $cartItem->updateTotalAmount();
     } else {
       CartItem::create([
         'cart_id' => $cart->id,
         'product_id' => $product_id,
-        'quantity' => 1,
+        'quantity' => $qty,
         'unit_amount' => $product->price,
       ]);
     }
 
-    return $cart->fresh()->total_items;
+    return $cart->fresh()->getTotalItems();
   }
 
   // Remove item from Cart
