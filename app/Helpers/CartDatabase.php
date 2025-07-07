@@ -40,7 +40,7 @@ class CartDatabase {
   // Add item to cart
   public static function addItemToCart($product_id): int {
     $cart = self::getOrCreateCart();
-    $product = Product::findOrFail('product_id');
+    $product = Product::findOrFail($product_id);
 
     $cartItem = CartItem::where('cart_id', $cart->id)
       ->where('product_id', $product_id)
@@ -100,6 +100,8 @@ class CartDatabase {
 
     if ($cartItem->quantity > 1) {
       $cartItem->decrementQuantity();
+    } else {
+      $cartItem->delete();
     }
 
     return self::getCartItemsFromDatabase();
@@ -112,13 +114,13 @@ class CartDatabase {
     }
 
     $cart = self::getOrCreateCart();
-    return $cart->grand_total;
+    return $cart->getGrandTotal();
   }
 
   // Get cart Item count
   public static function getCartItemsCount(): int {
     $cart = self::getOrCreateCart();
-    return $cart->total_items;
+    return $cart->getTotalItems();
   }
 
   // check if cart is empty
