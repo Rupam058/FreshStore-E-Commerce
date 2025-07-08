@@ -63,4 +63,12 @@ class User extends Authenticatable implements FilamentUser {
         // return str_ends_with($this->email, '@yourdomain.com') && $this->hasVerifiedEmail();
         return $this->email == 'admin@gmail.com';
     }
+
+    public function addresses() {
+        return $this->hasMany(Address::class);
+    }
+
+    public function getSavedAddresses() {
+        return $this->addresses()->orderBy('updated_at', 'desc')->get();
+    }
 }

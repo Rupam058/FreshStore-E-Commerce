@@ -27,11 +27,78 @@ class CheckoutPage extends Component {
     public $zip_code;
     public $payment_method;
 
+    // Address selection propterties
+    public $selected_address_id = null;
+    public $use_saved_address = false;
+    public $saved_addresses = [];
+
     public function mount() {
         $cart_items = CartDatabase::getCartItemsFromDatabase();
         if (count($cart_items) == 0) {
             return redirect('/products');
         }
+
+        // Load user's saved Addresses
+        $this->loadSavedAddresses();
+    }
+
+    public function loadSavedAddresses() {
+        $addresses = Auth::user()->getSavedAddresses();
+
+        // Convert to array but include the accessor methods
+        $this->saved_addresses = $addresses->map(function ($address) {
+            return [
+                'id' => $address->id,
+                'first_name' => $address->first_name,
+                'last_name' => $address->last_name,
+                'phone' => $address->phone,
+                'street_address' => $address->street_address,
+                'city' => $address->city,
+                'state' => $address->state,
+                'zip_code' => $address->zip_code,
+                'full_name' => $address->full_name, // This uses the accessor
+                'full_address' => $address->full_address, // This uses the accessor
+                'created_at' => $address->created_at,
+                'updated_at' => $address->updated_at,
+            ];
+        })->toArray();
+    }
+    public function updatedSelectedAddressId($value) {
+        if ($value && $this->use_saved_address) {
+            $address = Address::find($value);
+            if ($address && $address->user_id === Auth::id()) {
+                $this->fillAddressFields($address);
+            }
+        }
+    }
+    public function updatedUseSavedAddress($value) {
+        if ($value && $this->selected_address_id) {
+            $address = Address::find($this->selected_address_id);
+            if ($address && $address->user_id === Auth::id()) {
+                $this->fillAddressFields($address);
+            }
+        } else {
+            $this->clearAddressFields();
+        }
+    }
+    private function fillAddressFields($address) {
+        $this->first_name = $address->first_name;
+        $this->last_name = $address->last_name;
+        $this->phone = $address->phone;
+        $this->street_address = $address->street_address;
+        $this->city = $address->city;
+        $this->state = $address->state;
+        $this->zip_code = $address->zip_code;
+    }
+
+    private function clearAddressFields() {
+        $this->first_name = '';
+        $this->last_name = '';
+        $this->phone = '';
+        $this->street_address = '';
+        $this->city = '';
+        $this->state = '';
+        $this->zip_code = '';
     }
 
     public function placeOrder() {
@@ -76,14 +143,14 @@ class CheckoutPage extends Component {
         $order->notes = 'Order placed by ' . Auth::user()->name;
 
         // Address model
-        $address = new Address();
-        $address->first_name = $this->first_name;
-        $address->last_name = $this->last_name;
-        $address->phone = $this->phone;
-        $address->street_address = $this->street_address;
-        $address->city = $this->city;
-        $address->state = $this->state;
-        $address->zip_code = $this->zip_code;
+        // $address = new Address();
+        // $address->first_name = $this->first_name;
+        // $address->last_name = $this->last_name;
+        // $address->phone = $this->phone;
+        // $address->street_address = $this->street_address;
+        // $address->city = $this->city;
+        // $address->state = $this->state;
+        // $address->zip_code = $this->zip_code;
 
         $redirect_url = '';
 
@@ -107,8 +174,16 @@ class CheckoutPage extends Component {
         }
 
         $order->save();
-        $address->order_id = $order->id;
-        $address->save();
+        // $address->order_id = $order->id;
+        // $address->save();
+
+        // Handle address saving/updating
+        $address = $this->handleAddress();
+
+        // Create order-specific address record
+        $orderAddress = $address->replicate();
+        $orderAddress->order_id = $order->id;
+        $orderAddress->save();
 
         // Create order items from cart items
         $order_items = [];
@@ -130,6 +205,50 @@ class CheckoutPage extends Component {
         // send mail
         Mail::to(request()->user())->send(new OrderPlaced($order));
         return redirect($redirect_url);
+    }
+
+    private function handleAddress() {
+        $addressData = [
+            'first_name' => $this->first_name,
+            'last_name' => $this->last_name,
+            'phone' => $this->phone,
+            'street_address' => $this->street_address,
+            'city' => $this->city,
+            'state' => $this->state,
+            'zip_code' => $this->zip_code,
+        ];
+
+        if ($this->use_saved_address && $this->selected_address_id) {
+            // Update existing address
+            $address = Address::find($this->selected_address_id);
+            if ($address && $address->user_id === Auth::id()) {
+                $address->update($addressData);
+                return $address;
+            }
+        }
+
+        // Check if similar address exists
+        $existingAddress = Address::findSimilarForUser(Auth::id(), $addressData);
+
+        if ($existingAddress) {
+            $existingAddress->update($addressData);
+            return $existingAddress;
+        }
+
+        // Create new address
+        $addressData['user_id'] = Auth::id();
+        $address = Address::create($addressData);
+
+        return $address;
+    }
+
+    public function clearAddressForm() {
+        // Clear all address fields
+        $this->clearAddressFields();
+
+        // Reset address selection state
+        $this->selected_address_id = null;
+        $this->use_saved_address = false;
     }
 
     public function render() {

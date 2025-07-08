@@ -9,11 +9,80 @@
             <div class="bg-white rounded-xl shadow p-4 sm:p-7 dark:bg-slate-900">
                <!-- Shipping Address -->
                <div class="mb-6">
-                  <h2
-                     class="text-xl font-bold underline text-gray-700 dark:text-white mb-2">
-                     Shipping Address
-                  </h2>
-                  <div class="grid grid-cols-2 gap-4">
+                  <div class="flex justify-between items-center mb-4">
+                     <h2
+                        class="text-xl font-bold underline text-gray-700 dark:text-white">
+                        Shipping Address
+                     </h2>
+
+                     <!-- Clear Address Button -->
+                     <button
+                        type="button"
+                        wire:click="clearAddressForm"
+                        class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200"
+                     >
+                        <span
+                           wire:loading.remove
+                           wire:target="clearAddressForm"
+                        >Clear Address</span>
+                        <span
+                           wire:loading
+                           wire:target="clearAddressForm"
+                        >Clearing...</span>
+                     </button>
+                  </div>
+
+                  <!-- Saved Addresses Section -->
+                  @if (count($saved_addresses) > 0)
+                     <div
+                        class="mb-6 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg"
+                     >
+                        <div class="flex items-center mb-4">
+                           <input
+                              type="checkbox"
+                              id="use_saved_address"
+                              wire:model.live="use_saved_address"
+                              class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
+                           >
+                           <label
+                              for="use_saved_address"
+                              class="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300"
+                           >
+                              Use saved address
+                           </label>
+                        </div>
+
+                        @if ($use_saved_address)
+                           <div class="mb-4">
+                              <label
+                                 class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                              >
+                                 Select Address
+                              </label>
+                              <select
+                                 wire:model.live="selected_address_id"
+                                 class="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400"
+                              >
+                                 <option value="">Choose an address
+                                 </option>
+                                 @foreach ($saved_addresses as $address)
+                                    <option value="{{ $address['id'] }}">
+                                       {{ strtoupper($address['full_name']) }}
+                                       -
+                                       {{ $address['full_address'] }}
+                                    </option>
+                                 @endforeach
+                              </select>
+                           </div>
+                        @endif
+                     </div>
+                  @endif
+
+                  <div
+                     class="grid
+                                       grid-cols-2
+                                       gap-4"
+                  >
                      <div>
                         <label
                            class="block text-gray-700 dark:text-white mb-1"
@@ -32,7 +101,8 @@
                         >
                         </input>
                         @error('first_name')
-                           <div class="text-red-500 text-sm">{{ $message }}
+                           <div class="text-red-500 text-sm">
+                              {{ $message }}
                            </div>
                         @enderror
                      </div>
@@ -54,7 +124,8 @@
                         >
                         </input>
                         @error('last_name')
-                           <div class="text-red-500 text-sm">{{ $message }}
+                           <div class="text-red-500 text-sm">
+                              {{ $message }}
                            </div>
                         @enderror
                      </div>
@@ -77,7 +148,8 @@
                      >
                      </input>
                      @error('phone')
-                        <div class="text-red-500 text-sm">{{ $message }}
+                        <div class="text-red-500 text-sm">
+                           {{ $message }}
                         </div>
                      @enderror
                   </div>
@@ -99,7 +171,8 @@
                      >
                      </input>
                      @error('street_address')
-                        <div class="text-red-500 text-sm">{{ $message }}
+                        <div class="text-red-500 text-sm">
+                           {{ $message }}
                         </div>
                      @enderror
                   </div>
@@ -121,7 +194,8 @@
                      >
                      </input>
                      @error('city')
-                        <div class="text-red-500 text-sm">{{ $message }}
+                        <div class="text-red-500 text-sm">
+                           {{ $message }}
                         </div>
                      @enderror
                   </div>
@@ -144,7 +218,8 @@
                         >
                         </input>
                         @error('state')
-                           <div class="text-red-500 text-sm">{{ $message }}
+                           <div class="text-red-500 text-sm">
+                              {{ $message }}
                            </div>
                         @enderror
                      </div>
@@ -166,7 +241,8 @@
                         >
                         </input>
                         @error('zip_code')
-                           <div class="text-red-500 text-sm">{{ $message }}
+                           <div class="text-red-500 text-sm">
+                              {{ $message }}
                            </div>
                         @enderror
                      </div>
@@ -212,7 +288,8 @@
                         </svg>
                      </label>
                      @error('payment_method')
-                        <div class="text-red-500 text-sm">{{ $message }}
+                        <div class="text-red-500 text-sm">
+                           {{ $message }}
                         </div>
                      @enderror
                   </li>
