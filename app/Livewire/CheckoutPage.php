@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Helpers\CartDatabase;
 use App\Helpers\CartManagement;
 use App\Mail\OrderPlaced;
 use App\Models\Address;
@@ -27,7 +28,7 @@ class CheckoutPage extends Component {
     public $payment_method;
 
     public function mount() {
-        $cart_items = CartManagement::getCartItemsFromCookie();
+        $cart_items = CartDatabase::getCartItemsFromDatabase();
         if (count($cart_items) == 0) {
             return redirect('/products');
         }
@@ -45,7 +46,7 @@ class CheckoutPage extends Component {
             'payment_method' => 'required'
         ]);
 
-        $cart_items = CartManagement::getCartItemsFromCookie();
+        $cart_items = CartDatabase::getCartItemsFromDatabase();
 
         $line_items = [];
 
@@ -65,7 +66,7 @@ class CheckoutPage extends Component {
         // Order model
         $order = new Order();
         $order->user_id = Auth::user()->id;
-        $order->grand_total = CartManagement::calculateGrandTotal($cart_items);
+        $order->grand_total = CartDatabase::calculateGrandTotal($cart_items);
         $order->payment_method = $this->payment_method;
         $order->payment_status = 'pending';
         $order->status = 'confirmed';
@@ -109,8 +110,22 @@ class CheckoutPage extends Component {
         $address->order_id = $order->id;
         $address->save();
 
-        $order->items()->createMany($cart_items);
-        CartManagement::clearCart();
+        // Create order items from cart items
+        $order_items = [];
+        foreach ($cart_items as $item) {
+            $order_items[] = [
+                'product_id' => $item['product_id'],
+                'quantity' => $item['quantity'],
+                'unit_amount' => $item['unit_amount'],
+                'total_amount' => $item['total_amount'],
+                'created_at' => now(),
+                'updated_at' => now(),
+            ];
+        }
+
+        $order->items()->createMany($order_items);
+        // CartManagement::clearCart();
+        CartDatabase::clearCart();
 
         // send mail
         Mail::to(request()->user())->send(new OrderPlaced($order));
@@ -118,8 +133,10 @@ class CheckoutPage extends Component {
     }
 
     public function render() {
-        $cart_items = CartManagement::getCartItemsFromCookie();
-        $grand_total = CartManagement::calculateGrandTotal($cart_items);
+        // $cart_items = CartManagement::getCartItemsFromCookie();
+        // $grand_total = CartManagement::calculateGrandTotal($cart_items);
+        $cart_items = CartDatabase::getCartItemsFromDatabase();
+        $grand_total = CartDatabase::calculateGrandTotal($cart_items);
 
         return view('livewire.checkout-page', [
             'cart_items' => $cart_items,
