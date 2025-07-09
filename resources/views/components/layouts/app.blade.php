@@ -1,5 +1,8 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html
+   lang="{{ str_replace('_', '-', app()->getLocale()) }}"
+   class="h-full"
+>
 
 <head>
    <meta charset="utf-8">
@@ -13,9 +16,9 @@
    @livewireStyles()
 </head>
 
-<body class="bg-slate-200 dark:bg-slate-700">
+<body class="bg-slate-200 dark:bg-slate-700 h-full flex flex-col">
    @livewire('partials.navbar')
-   <main>
+   <main class="flex-grow">
       {{ $slot }}
    </main>
    @livewire('partials.footer')
