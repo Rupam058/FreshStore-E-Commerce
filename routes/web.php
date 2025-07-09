@@ -21,7 +21,6 @@ Route::get('/',  HomePage::class);
 Route::get('/categories', CategoriesPage::class);
 Route::get('/products', ProductsPage::class);
 Route::get('/products/{slug}', ProductDetailPage::class);
-Route::get('/cart', CartPage::class);
 
 Route::middleware('guest')->group(function () {
   Route::get('/login', LoginPage::class)->name('login');
@@ -33,6 +32,7 @@ Route::middleware('guest')->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
+  Route::get('/cart', CartPage::class);
   Route::get('/logout', function () {
     Auth::logout();
     return redirect('/');
