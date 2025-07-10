@@ -8,8 +8,10 @@
         {
             "src": "/(.*)",
             "dest": "/api/index.php"
-        }
+        },
+        {"src": "/static/(.*)", "dest": "/public/static/$1"},
     ],
+  "outputDirectory": "public",
     "env": {
         "APP_ENV": "production",
         "APP_DEBUG": "false",
