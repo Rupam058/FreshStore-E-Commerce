@@ -9,13 +9,12 @@
             "src": "/(.*)",
             "dest": "/api/index.php"
         },
-        {"src": "/static/(.*)", "dest": "/public/static/$1"},
     ],
-  "outputDirectory": "public",
+    "outputDirectory": "public",
     "env": {
         "APP_ENV": "production",
         "APP_DEBUG": "false",
-        "APP_URL": "https://https://fresh-store-e-commerce.vercel.app",
+        "APP_URL": "https://fresh-store-e-commerce.vercel.app",
         "APP_KEY": "base64:QnYdvAidqgmsiy3X3aEv/E8baWhXffjKqY5XqXh/Ojs=",
 
         "APP_CONFIG_CACHE": "/tmp/config.php",
